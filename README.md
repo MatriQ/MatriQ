@@ -2,29 +2,22 @@
   <img src="https://capsule-render.vercel.app/api?text=Matri%20Qi's%20Profile!&animation=fadeIn&type=waving&color=gradient&height=100"/>
 </p>
 
-# Matri Qi
-
 ## Senior Full-Stack Engineer
 
 [![Email](https://img.shields.io/badge/Email-matrixdom@126.com-blue?style=flat&logo=gmail)](mailto:matrixdom#126.com)
 [![GitHub](https://img.shields.io/badge/GitHub-matriq-black?style=flat&logo=github)](https://github.com/matriq)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-matriqi-blue?style=flat&logo=linkedin)](https://linkedin.com/in/matriqi)
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=matriq&show_icons=true&theme=radical" alt="GitHub Stats" />
-</p>
-
 ## About Me
 
 ```yaml
-name: Qi Jianping
 role: Senior Full-Stack Engineer
 experience: 16+ years
 specialization: Full-Stack Development, System Design
 current_focus: LLM, Digital Human Systems
 ```
 
-I am an experienced senior full-stack engineer with over 16 years of industry experience in development, deployment, and system design. I have a passion for technology and strong learning capabilities. I have 5 years of experience working with multinational teams, including colleagues from Europe and America in recent years. I was previously active in the LLM open-source project Dify ([github.com/langgenius/dify](https://github.com/langgenius/dify)) in 2023-2024, which currently has 63K stars and I was among the top 12 contributors.
+I am an experienced senior full-stack engineer with over 16 years of industry experience in development, deployment, and system design. I have a passion for technology and strong learning capabilities. I have 5 years of experience working with multinational teams, including colleagues from Europe and America in recent years. 
 
 ## 🛠️ Tech Stack
 
@@ -84,7 +77,11 @@ I am an experienced senior full-stack engineer with over 16 years of industry ex
 🏆 **Oct 2007** - Outstanding Contestant in the 2007 Chengdu International Software Development Competition
 
 <p align="center">
-  <img src="https://github.com/matriq/matriq/blob/output/github-contribution-grid-snake.svg" alt="Snake animation" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="github-snake.svg" />
+    <img alt="github-snake" src="github-snake.svg" />
+    </picture>
 </p>
 
 <p align="center">
