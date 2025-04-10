@@ -5,34 +5,45 @@
 ## Senior Full-Stack Engineer
 
 [![Email](https://img.shields.io/badge/Email-matrixdom@126.com-blue?style=flat&logo=gmail)](mailto:matrixdom#126.com)
-[![GitHub](https://img.shields.io/badge/GitHub-matriq-black?style=flat&logo=github)](https://github.com/matriq)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-matriqi-blue?style=flat&logo=linkedin)](https://linkedin.com/in/matriqi)
 
 ## About Me
 
 ```yaml
-role: Senior Full-Stack Engineer
-experience: 16+ years
-specialization: Full-Stack Development, System Design
-current_focus: LLM, Digital Human Systems
+Role: Senior Full-Stack Engineer
+Experience: 16+ years
+Specialization: Full-Stack Development, System Architecture
 ```
 
 I am an experienced senior full-stack engineer with over 16 years of industry experience in development, deployment, and system design. I have a passion for technology and strong learning capabilities. I have 5 years of experience working with multinational teams, including colleagues from Europe and America in recent years. 
+
+## Languages
+
+![Python](https://img.shields.io/badge/-Python-000?&logo=Python)
+![Typescript](https://img.shields.io/badge/-Typescript-000?&logo=Typescript)
+![Golang](https://img.shields.io/badge/-Go-000?&logo=Go)
+![Javascript](https://img.shields.io/badge/-Javascript-000?&logo=Javascript)
+![C++](https://img.shields.io/badge/-C++-000?&logo=c%2b%2b&logoColor=00599C)
+![SQL](https://img.shields.io/badge/-SQL-000?&logo=MySQL)
+![Lua](https://img.shields.io/badge/-Lua-000?&logo=Lua)
 
 ## 🛠️ Tech Stack
 
 <p align="left">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="react" width="45" height="45"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="nodejs" width="45" height="45"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="python" width="45" height="45"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="go" width="45" height="45"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="fastapi" width="45" height="45"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" alt="flask" width="45" height="45"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" alt="kubernetes" width="45" height="45"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="docker" width="45" height="45"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="postgresql" width="45" height="45"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" alt="redis" width="45" height="45"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="typescript" width="45" height="45"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="45" height="45"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="nextjs" width="45" height="45"/>
+   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg" alt="nextjs" width="45" height="45"/>
+     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg" alt="nextjs" width="45" height="45"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg" alt="prisma" width="45" height="45"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" alt="unity" width="45" height="45"/>
+</p>  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" alt="unity" width="45" height="45"/>
 </p>
 
 ## 💼 Work Experience
@@ -80,10 +91,7 @@ I am an experienced senior full-stack engineer with over 16 years of industry ex
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="github-snake-dark.svg" />
     <source media="(prefers-color-scheme: light)" srcset="github-snake.svg" />
-    <img alt="github-snake" src="github-snake.svg" />
-    </picture>
+    <img src="github-snake.svg" />
+  </picture>
 </p>
 
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer"/>
-</p> 
