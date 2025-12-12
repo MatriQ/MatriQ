@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk 3D Particle Header - Matri Qi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #000;
+            font-family: 'Courier New', monospace;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .glitch-text {
+            font-size: 80px;
+            font-weight: bold;
+            color: #00F0FF;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            text-shadow:
+                0 0 10px #00F0FF,
+                0 0 20px #00F0FF,
+                0 0 30px #00F0FF,
+                0 0 40px #FF006E,
+                0 0 70px #FF006E,
+                0 0 80px #FF006E,
+                0 0 100px #FF006E,
+                0 0 150px #FF006E;
+            animation: glitch 3s infinite, flicker 0.5s infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #39FF14;
+            margin-top: 20px;
+            letter-spacing: 4px;
+            text-shadow:
+                0 0 10px #39FF14,
+                0 0 20px #39FF14,
+                0 0 30px #39FF14;
+            animation: typing 4s steps(40) infinite, pulse 2s infinite;
+        }
+
+        .scanline {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(transparent, #00F0FF 50%, transparent);
+            animation: scan 8s linear infinite;
+            opacity: 0.3;
+            z-index: 5;
+        }
+
+        @keyframes glitch {
+            0%, 100% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+        }
+
+        @keyframes flicker {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.95;
+            }
+        }
+
+        @keyframes typing {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px #39FF14,
+                    0 0 20px #39FF14,
+                    0 0 30px #39FF14;
+            }
+            50% {
+                text-shadow:
+                    0 0 20px #39FF14,
+                    0 0 30px #39FF14,
+                    0 0 40px #39FF14,
+                    0 0 50px #39FF14;
+            }
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        .grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(#00F0FF22 1px, transparent 1px),
+                linear-gradient(90deg, #00F0FF22 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: perspective(500px) rotateX(60deg) translateZ(0);
+            }
+            100% {
+                transform: perspective(500px) rotateX(60deg) translateZ(100px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="grid"></div>
+    <div class="scanline"></div>
+    <div class="content">
+        <div class="glitch-text" data-text="MATRI QI">MATRI QI</div>
+        <div class="subtitle">&gt; INITIALIZING NEURAL NETWORK...</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        // Particle system
+        class Particle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * height;
+                this.age = Math.random() * 100;
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -10;
+                this.z = Math.random() * 2000;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = Math.random() * 0.5 + 0.5;
+                this.vz = Math.random() * 2 + 1;
+                this.age = 0;
+                this.maxAge = Math.random() * 100 + 100;
+
+                // Random cyberpunk color
+                const colors = ['#00F0FF', '#FF006E', '#39FF14', '#8B5CF6', '#FF10F0'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.age++;
+
+                // Movement
+                this.x += this.vx;
+                this.y += this.vy;
+                this.z -= this.vz;
+
+                // 3D perspective
+                const scale = 500 / (500 + this.z);
+                this.sx = (this.x - width / 2) * scale + width / 2;
+                this.sy = (this.y - height / 2) * scale + height / 2;
+                this.sSize = this.size * scale;
+
+                // Reset if out of bounds or too old
+                if (this.z < 1 || this.age > this.maxAge || this.sy > height + 50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const alpha = 1 - this.age / this.maxAge;
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = alpha * 0.8;
+
+                // Draw particle
+                ctx.beginPath();
+                ctx.arc(this.sx, this.sy, this.sSize, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Glow effect
+                const gradient = ctx.createRadialGradient(
+                    this.sx, this.sy, 0,
+                    this.sx, this.sy, this.sSize * 3
+                );
+                gradient.addColorStop(0, this.color);
+                gradient.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = gradient;
+                ctx.globalAlpha = alpha * 0.3;
+                ctx.beginPath();
+                ctx.arc(this.sx, this.sy, this.sSize * 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // Connection lines between nearby particles
+        class ConnectionLine {
+            constructor(p1, p2) {
+                this.p1 = p1;
+                this.p2 = p2;
+            }
+
+            draw() {
+                const dx = this.p1.sx - this.p2.sx;
+                const dy = this.p1.sy - this.p2.sy;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 150) {
+                    const alpha = 1 - distance / 150;
+                    ctx.strokeStyle = '#00F0FF';
+                    ctx.globalAlpha = alpha * 0.2;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(this.p1.sx, this.p1.sy);
+                    ctx.lineTo(this.p2.sx, this.p2.sy);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+            }
+        }
+
+        // Create particles
+        const particles = [];
+        const particleCount = 300;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Shader-like wave effect
+        let time = 0;
+        function drawShaderBackground() {
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            for (let y = 0; y < height; y += 4) {
+                for (let x = 0; x < width; x += 4) {
+                    const i = (y * width + x) * 4;
+
+                    // Shader-like color calculation
+                    const nx = x / width - 0.5;
+                    const ny = y / height - 0.5;
+                    const d = Math.sqrt(nx * nx + ny * ny);
+
+                    const wave1 = Math.sin(d * 20 - time * 0.02) * 0.5 + 0.5;
+                    const wave2 = Math.sin(nx * 10 + time * 0.03) * 0.5 + 0.5;
+                    const wave3 = Math.sin(ny * 10 - time * 0.025) * 0.5 + 0.5;
+
+                    // Cyberpunk color mixing
+                    const r = wave1 * 255 * 0.1;
+                    const g = wave2 * 240 * 0.15;
+                    const b = wave3 * 255 * 0.2;
+
+                    for (let dy = 0; dy < 4 && y + dy < height; dy++) {
+                        for (let dx = 0; dx < 4 && x + dx < width; dx++) {
+                            const idx = ((y + dy) * width + (x + dx)) * 4;
+                            data[idx] = r;
+                            data[idx + 1] = g;
+                            data[idx + 2] = b;
+                            data[idx + 3] = 30;
+                        }
+                    }
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        // Animation loop
+        function animate() {
+            // Clear with fade effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw shader background
+            drawShaderBackground();
+
+            // Update and draw particles
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Draw connections
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    if (Math.random() > 0.97) { // Limit connections for performance
+                        const line = new ConnectionLine(particles[i], particles[j]);
+                        line.draw();
+                    }
+                }
+            }
+
+            // Add DNA helix effect
+            time++;
+            const helixY = (time * 2) % height;
+            for (let i = 0; i < 10; i++) {
+                const angle = (time * 0.05 + i * 0.5) % (Math.PI * 2);
+                const x = width / 2 + Math.cos(angle) * 200;
+                const y = helixY - i * 50;
+
+                if (y > 0 && y < height) {
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, 20);
+                    gradient.addColorStop(0, '#FF006E');
+                    gradient.addColorStop(1, 'rgba(255, 0, 110, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.globalAlpha = 0.3;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 20, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // Start animation
+        animate();
+
+        // Enhanced glitch effect for text
+        setInterval(() => {
+            const glitchText = document.querySelector('.glitch-text');
+            glitchText.style.textShadow = `
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 #FF006E,
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 #00F0FF,
+                0 0 10px #00F0FF,
+                0 0 20px #00F0FF,
+                0 0 30px #00F0FF,
+                0 0 40px #FF006E,
+                0 0 70px #FF006E,
+                0 0 80px #FF006E,
+                0 0 100px #FF006E,
+                0 0 150px #FF006E
+            `;
+
+            setTimeout(() => {
+                glitchText.style.textShadow = `
+                    0 0 10px #00F0FF,
+                    0 0 20px #00F0FF,
+                    0 0 30px #00F0FF,
+                    0 0 40px #FF006E,
+                    0 0 70px #FF006E,
+                    0 0 80px #FF006E,
+                    0 0 100px #FF006E,
+                    0 0 150px #FF006E
+                `;
+            }, 50);
+        }, 3000);
+
+        // Typing effect
+        const subtitleTexts = [
+            '> INITIALIZING NEURAL NETWORK...',
+            '> SYSTEM ARCHITECT | 16+ YEARS',
+            '> AI | CLOUD | FULL-STACK | DevOps',
+            '> SENIOR FULL-STACK ENGINEER'
+        ];
+        let currentTextIndex = 0;
+
+        setInterval(() => {
+            currentTextIndex = (currentTextIndex + 1) % subtitleTexts.length;
+            document.querySelector('.subtitle').textContent = subtitleTexts[currentTextIndex];
+        }, 3000);
+    </script>
+</body>
+</html>

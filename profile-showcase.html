@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matri Qi - Cyberpunk Portfolio Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #E6EDF3;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00F0FF;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: all 0.1s ease;
+            box-shadow: 0 0 20px #00F0FF;
+        }
+
+        #cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #FF006E;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px #FF006E;
+        }
+
+        /* Particle System Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Background Grid */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridScroll 20s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% {
+                transform: perspective(500px) rotateX(60deg) translateZ(0);
+            }
+            100% {
+                transform: perspective(500px) rotateX(60deg) translateZ(50px);
+            }
+        }
+
+        /* Content Container */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 120px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00F0FF, #FF006E, #8B5CF6, #00F0FF);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 5s ease infinite, glitchTitle 8s infinite;
+            text-shadow:
+                0 0 30px rgba(0, 240, 255, 0.5),
+                0 0 60px rgba(255, 0, 110, 0.5);
+            letter-spacing: 10px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .hero-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes glitchTitle {
+            0%, 90%, 100% { transform: translate(0, 0); }
+            91% { transform: translate(-5px, 2px); }
+            92% { transform: translate(5px, -2px); }
+            93% { transform: translate(-2px, 3px); }
+            94% { transform: translate(2px, -3px); }
+            95% { transform: translate(0, 0); }
+        }
+
+        .hero-subtitle {
+            font-size: 28px;
+            color: #39FF14;
+            margin-top: 30px;
+            text-shadow: 0 0 20px #39FF14;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease 0.3s;
+        }
+
+        .hero-subtitle.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: #7D8590;
+            margin-top: 20px;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease 0.6s;
+        }
+
+        .hero-description.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 50px;
+            border: 2px solid #00F0FF;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: #00F0FF;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            animation: scrollDot 2s infinite;
+            box-shadow: 0 0 10px #00F0FF;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        @keyframes scrollDot {
+            0% { top: 10px; opacity: 1; }
+            100% { top: 30px; opacity: 0; }
+        }
+
+        /* Section Styles */
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 48px;
+            color: #00F0FF;
+            margin-bottom: 50px;
+            text-align: center;
+            text-shadow: 0 0 20px #00F0FF;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-card {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid #00F0FF;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.6s ease;
+            cursor: pointer;
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(0, 240, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .stat-card:hover::before {
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.4);
+            border-color: #FF006E;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FF006E;
+            text-shadow: 0 0 20px #FF006E;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #7D8590;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Tech Stack Pills */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .tech-pill {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid #8B5CF6;
+            border-radius: 25px;
+            padding: 12px 24px;
+            font-size: 14px;
+            color: #E6EDF3;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .tech-pill.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .tech-pill:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #00F0FF;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #00F0FF, #FF006E);
+            box-shadow: 0 0 10px #00F0FF;
+        }
+
+        .timeline-item {
+            margin: 50px 0;
+            position: relative;
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+        }
+
+        .timeline-item:nth-child(odd) {
+            padding-right: 50%;
+            text-align: right;
+            transform: translateX(-50px);
+        }
+
+        .timeline-item:nth-child(even) {
+            padding-left: 50%;
+            transform: translateX(50px);
+        }
+
+        .timeline-item.visible {
+            transform: translateX(0);
+        }
+
+        .timeline-content {
+            background: rgba(13, 17, 23, 0.9);
+            border: 1px solid #FF006E;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .timeline-item:hover .timeline-content {
+            border-color: #00F0FF;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #FF006E;
+            border: 3px solid #0D1117;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px #FF006E;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.2); }
+        }
+
+        .timeline-year {
+            font-size: 24px;
+            color: #00F0FF;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            color: #39FF14;
+            margin-bottom: 10px;
+        }
+
+        .timeline-description {
+            color: #7D8590;
+            line-height: 1.6;
+        }
+
+        /* Interactive Code Block */
+        .code-showcase {
+            background: rgba(13, 17, 23, 0.9);
+            border: 1px solid #00F0FF;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 50px auto;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(0, 240, 255, 0.1);
+            border-bottom: 1px solid #00F0FF;
+        }
+
+        .code-showcase::after {
+            content: '● ● ●';
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            color: #FF006E;
+            font-size: 12px;
+            letter-spacing: 5px;
+        }
+
+        .code-content {
+            margin-top: 40px;
+            font-family: 'Courier New', monospace;
+            color: #39FF14;
+            line-height: 1.8;
+        }
+
+        .code-line {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .code-line.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .code-keyword {
+            color: #FF006E;
+        }
+
+        .code-string {
+            color: #00F0FF;
+        }
+
+        .code-comment {
+            color: #7D8590;
+            font-style: italic;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00F0FF, #FF006E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.5);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.7);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .fab::before {
+            content: '↑';
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 60px;
+            }
+
+            .hero-subtitle {
+                font-size: 20px;
+            }
+
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                padding-left: 40px;
+                padding-right: 0;
+                text-align: left;
+            }
+
+            .timeline-dot {
+                left: 0;
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 100px;
+            height: 100px;
+            border: 3px solid rgba(0, 240, 255, 0.1);
+            border-top: 3px solid #00F0FF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Parallax Layers */
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .parallax-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        /* Mouse Follow Effect */
+        .mouse-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transition: all 0.3s ease;
+            mix-blend-mode: screen;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+    <div id="cursor-trail"></div>
+
+    <!-- Mouse Glow Effect -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <!-- Particle Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Grid Background -->
+    <div class="grid-background"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="parallax-layer" id="parallaxLayer"></div>
+            <h1 class="hero-title" id="heroTitle">MATRI QI</h1>
+            <p class="hero-subtitle" id="heroSubtitle">&gt; SENIOR FULL-STACK ENGINEER</p>
+            <p class="hero-description" id="heroDescription">
+                16+ years of experience in full-stack development, system architecture, and AI integration.
+                Specialized in building scalable cloud-native applications and digital human systems.
+            </p>
+            <div class="scroll-indicator"></div>
+        </header>
+
+        <!-- Stats Section -->
+        <section id="stats">
+            <h2 class="section-title">SYSTEM METRICS</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">16+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Technologies Mastered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">International Teams</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Section -->
+        <section id="tech">
+            <h2 class="section-title">TECHNOLOGY ARSENAL</h2>
+            <div class="tech-stack">
+                <div class="tech-pill">Python</div>
+                <div class="tech-pill">TypeScript</div>
+                <div class="tech-pill">Go</div>
+                <div class="tech-pill">React</div>
+                <div class="tech-pill">Next.js</div>
+                <div class="tech-pill">Node.js</div>
+                <div class="tech-pill">FastAPI</div>
+                <div class="tech-pill">Kubernetes</div>
+                <div class="tech-pill">Docker</div>
+                <div class="tech-pill">PostgreSQL</div>
+                <div class="tech-pill">Redis</div>
+                <div class="tech-pill">AI/ML</div>
+                <div class="tech-pill">WebRTC</div>
+                <div class="tech-pill">Three.js</div>
+            </div>
+
+            <!-- Code Showcase -->
+            <div class="code-showcase">
+                <div class="code-content">
+                    <div class="code-line"><span class="code-keyword">const</span> engineer = {</div>
+                    <div class="code-line">  <span class="code-keyword">name</span>: <span class="code-string">"Matri Qi"</span>,</div>
+                    <div class="code-line">  <span class="code-keyword">role</span>: <span class="code-string">"Senior Full-Stack Engineer"</span>,</div>
+                    <div class="code-line">  <span class="code-keyword">experience</span>: <span class="code-string">"16+ years"</span>,</div>
+                    <div class="code-line">  <span class="code-keyword">specialties</span>: [</div>
+                    <div class="code-line">    <span class="code-string">"System Architecture"</span>,</div>
+                    <div class="code-line">    <span class="code-string">"AI Integration"</span>,</div>
+                    <div class="code-line">    <span class="code-string">"Cloud Native Development"</span></div>
+                    <div class="code-line">  ],</div>
+                    <div class="code-line">  <span class="code-keyword">motto</span>: <span class="code-string">"Code is poetry written in logic"</span></div>
+                    <div class="code-line">};</div>
+                    <div class="code-line"><span class="code-comment">// Building the future, one commit at a time</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline">
+            <h2 class="section-title">CAREER TIMELINE</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024</div>
+                        <div class="timeline-title">Dify Key Contributor</div>
+                        <div class="timeline-description">
+                            Recognition for significant contributions to the Dify open-source project
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023-2025</div>
+                        <div class="timeline-title">bitHuman Inc - Senior Full-Stack Engineer</div>
+                        <div class="timeline-description">
+                            Architected digital human systems with AI/ML integration, WebRTC communication, and cloud-native infrastructure
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2019-2023</div>
+                        <div class="timeline-title">AiFi Inc - Senior Full-Stack Engineer</div>
+                        <div class="timeline-description">
+                            Developed unmanned store solutions with Unity3D, microservices architecture, and distributed systems
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2018-2019</div>
+                        <div class="timeline-title">Chengdu Panda Network Tech - Co-Founder</div>
+                        <div class="timeline-description">
+                            Led technical direction for WeChat Mini Programs, cloud solutions, and video capture systems
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2012</div>
+                        <div class="timeline-title">Microsoft China - 1st Place Winner</div>
+                        <div class="timeline-description">
+                            Windows 8 Development Marathon Southwest Region Champion
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="scrollToTop"></div>
+
+    <script>
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                initAnimations();
+            }, 1500);
+        });
+
+        // ==================== CUSTOM CURSOR ====================
+        const cursor = document.getElementById('cursor');
+        const cursorTrail = document.getElementById('cursor-trail');
+        let mouseX = 0, mouseY = 0;
+        let trailX = 0, trailY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        function animateCursorTrail() {
+            trailX += (mouseX - trailX) * 0.1;
+            trailY += (mouseY - trailY) * 0.1;
+            cursorTrail.style.left = trailX + 'px';
+            cursorTrail.style.top = trailY + 'px';
+            requestAnimationFrame(animateCursorTrail);
+        }
+        animateCursorTrail();
+
+        // Cursor hover effects
+        document.querySelectorAll('.stat-card, .tech-pill, .fab, .timeline-content').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.5)';
+                cursor.style.borderColor = '#FF006E';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.borderColor = '#00F0FF';
+            });
+        });
+
+        // ==================== MOUSE GLOW EFFECT ====================
+        const mouseGlow = document.getElementById('mouseGlow');
+        document.addEventListener('mousemove', (e) => {
+            mouseGlow.style.left = (e.clientX - 150) + 'px';
+            mouseGlow.style.top = (e.clientY - 150) + 'px';
+        });
+
+        // ==================== PARTICLE SYSTEM ====================
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                const colors = ['#00F0FF', '#FF006E', '#39FF14', '#8B5CF6'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Mouse interaction
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 100) {
+                    const force = (100 - dist) / 100;
+                    this.vx -= (dx / dist) * force * 0.5;
+                    this.vy -= (dy / dist) * force * 0.5;
+                }
+
+                // Scroll effect
+                this.y += window.scrollY * 0.0001;
+
+                // Boundaries
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Velocity damping
+                this.vx *= 0.99;
+                this.vy *= 0.99;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Glow
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size * 3
+                );
+                gradient.addColorStop(0, this.color);
+                gradient.addColorStop(1, 'transparent');
+                ctx.fillStyle = gradient;
+                ctx.globalAlpha = this.alpha * 0.3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Create particles
+        for (let i = 0; i < 150; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.globalAlpha = 1;
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Draw connections
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 100) {
+                        ctx.strokeStyle = '#00F0FF';
+                        ctx.globalAlpha = (1 - dist / 100) * 0.1;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ==================== PARALLAX EFFECT ====================
+        const parallaxLayer = document.getElementById('parallaxLayer');
+
+        // Create parallax circles
+        for (let i = 0; i < 5; i++) {
+            const circle = document.createElement('div');
+            circle.className = 'parallax-circle';
+            circle.style.width = Math.random() * 200 + 100 + 'px';
+            circle.style.height = circle.style.width;
+            circle.style.left = Math.random() * 100 + '%';
+            circle.style.top = Math.random() * 100 + '%';
+            circle.style.background = `radial-gradient(circle, ${
+                ['#00F0FF', '#FF006E', '#8B5CF6'][Math.floor(Math.random() * 3)]
+            } 0%, transparent 70%)`;
+            parallaxLayer.appendChild(circle);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const circles = document.querySelectorAll('.parallax-circle');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            circles.forEach((circle, index) => {
+                const speed = (index + 1) * 20;
+                const offsetX = (x - 0.5) * speed;
+                const offsetY = (y - 0.5) * speed;
+                circle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            });
+        });
+
+        // ==================== SCROLL ANIMATIONS ====================
+        function initAnimations() {
+            // Initial hero animations
+            document.getElementById('heroTitle').classList.add('visible');
+            document.getElementById('heroSubtitle').classList.add('visible');
+            document.getElementById('heroDescription').classList.add('visible');
+        }
+
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.section-title, .stat-card, .timeline-item, .code-line').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Tech pills staggered animation
+        const techPills = document.querySelectorAll('.tech-pill');
+        const techObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    techPills.forEach((pill, index) => {
+                        setTimeout(() => {
+                            pill.classList.add('visible');
+                        }, index * 50);
+                    });
+                    techObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        if (techPills.length > 0) {
+            techObserver.observe(techPills[0]);
+        }
+
+        // Code lines animation
+        const codeLines = document.querySelectorAll('.code-line');
+        const codeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    codeLines.forEach((line, index) => {
+                        setTimeout(() => {
+                            line.classList.add('visible');
+                        }, index * 100);
+                    });
+                    codeObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        if (codeLines.length > 0) {
+            codeObserver.observe(codeLines[0]);
+        }
+
+        // ==================== SCROLL TO TOP ====================
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Show/hide FAB based on scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollToTopBtn.style.opacity = '1';
+            } else {
+                scrollToTopBtn.style.opacity = '0';
+            }
+        });
+
+        // ==================== RESIZE HANDLER ====================
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // ==================== STAT COUNTER ANIMATION ====================
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target + (element.textContent.includes('+') ? '+' : '');
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current) + (element.textContent.includes('+') ? '+' : '');
+                }
+            }, 30);
+        }
+
+        // Animate counters when visible
+        const statCards = document.querySelectorAll('.stat-card');
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const number = entry.target.querySelector('.stat-number');
+                    const target = parseInt(number.textContent);
+                    animateCounter(number, target);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        statCards.forEach(card => statsObserver.observe(card));
+    </script>
+</body>
+</html>
