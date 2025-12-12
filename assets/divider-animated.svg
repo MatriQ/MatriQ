@@ -1,0 +1,50 @@
+<svg width="1200" height="100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="divGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:0">
+        <animate attributeName="stop-opacity" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#FF006E;stop-opacity:1">
+        <animate attributeName="offset" values="0.5;0.7;0.5" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:0">
+        <animate attributeName="stop-opacity" values="0;1;0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <filter id="divGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="100" fill="#000000" opacity="0"/>
+
+  <!-- Wave Line -->
+  <path d="M 0,50 Q 300,30 600,50 T 1200,50" stroke="url(#divGrad)" stroke-width="2" fill="none" filter="url(#divGlow)">
+    <animate attributeName="d"
+      values="M 0,50 Q 300,30 600,50 T 1200,50;
+              M 0,50 Q 300,70 600,50 T 1200,50;
+              M 0,50 Q 300,30 600,50 T 1200,50"
+      dur="4s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Particles along the line -->
+  <circle cx="0" cy="50" r="3" fill="#00F0FF" opacity="0.8" filter="url(#divGlow)">
+    <animate attributeName="cx" values="0;1200" dur="6s" repeatCount="indefinite"/>
+    <animateMotion path="M 0,50 Q 300,30 600,50 T 1200,50" dur="6s" repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="0" cy="50" r="2.5" fill="#FF006E" opacity="0.7" filter="url(#divGlow)">
+    <animate attributeName="cx" values="0;1200" dur="8s" repeatCount="indefinite"/>
+    <animateMotion path="M 0,50 Q 300,70 600,50 T 1200,50" dur="8s" repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="0" cy="50" r="2" fill="#39FF14" opacity="0.6" filter="url(#divGlow)">
+    <animate attributeName="cx" values="0;1200" dur="7s" repeatCount="indefinite"/>
+    <animateMotion path="M 0,50 Q 300,50 600,50 T 1200,50" dur="7s" repeatCount="indefinite"/>
+  </circle>
+</svg>
