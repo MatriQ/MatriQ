@@ -83,12 +83,12 @@ I'm **Matri Qi**, a senior full-stack engineer with **18 years of experience**. 
   <source media="(prefers-color-scheme: light) and (max-width: 640px)" srcset="./assets/signal-journey-light-mobile.svg" />
   <source media="(prefers-color-scheme: light)" srcset="./assets/signal-journey-light.svg" />
   <source media="(max-width: 640px)" srcset="./assets/signal-journey-dark-mobile.svg" />
-  <img src="./assets/signal-journey-dark.svg" width="100%" alt="Xmind — Full-Stack Engineer, Apr 2025–Present. Account &amp; Billing development and maintenance, system architecture, SaaS implementation, and system optimization. bitHuman Inc. — Senior Full-Stack Engineer, Dec 2023–Feb 2025. AiFi Inc. — Senior Full-Stack Engineer, Sep 2019–Dec 2023. Chengdu Panda Network Tech — Co-Founder, Mar 2018–Sep 2019." />
+  <img src="./assets/signal-journey-dark.svg" width="100%" alt="Xmind — Senior Full-Stack Engineer, Apr 2025–Present. Account &amp; Billing development and maintenance, system architecture, SaaS implementation, and system optimization. bitHuman Inc. — Senior Full-Stack Engineer, Dec 2023–Feb 2025. AiFi Inc. — Senior Full-Stack Engineer, Sep 2019–Dec 2023. Chengdu Panda Network Tech — Co-Founder, Mar 2018–Sep 2019." />
 </picture>
 </p>
 
 <details open>
-<summary><b>Xmind — Full-Stack Engineer</b> · Apr 2025–Present</summary>
+<summary><b>Xmind — Senior Full-Stack Engineer</b> · Apr 2025–Present</summary>
 
 - Maintain and develop Account &amp; Billing services.
 - Design system architecture.
